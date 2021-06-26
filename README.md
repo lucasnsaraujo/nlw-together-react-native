@@ -1,7 +1,7 @@
 # NLW/Together | Trilha React Native
 
 - Dia 1 [ x ]
-- Dia 2 [   ]
-- Dia 3 [   ]
-- Dia 4 [   ]
+- Dia 2 [ x ]
+- Dia 3 [ x ]
+- Dia 4 [ x ]
 - Dia 5 [   ]

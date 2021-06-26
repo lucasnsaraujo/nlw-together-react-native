@@ -1,18 +1,29 @@
 import React from 'react'
-import { Image } from 'react-native'
+import { Image, View } from 'react-native'
 import { RectButton, RectButtonProps } from 'react-native-gesture-handler'
-
 import { styles } from './styles'
+import DiscordSvg from '../../assets/discord.svg'
 
-export function GuildIcon() {
+const { CDN_IMAGE } = process.env
 
-  const uri = 'https://iconarchive.com/download/i59244/franksouza183/fs/Apps-counter-strike.ico'
+type Props = {
+  guildId: string;
+  iconId: string | null;
+}
+
+export function GuildIcon({guildId, iconId}: Props) {
+
+  const uri = `${CDN_IMAGE}/icons/${guildId}/${iconId}.png`
 
   return (
-    <Image
-    source={{uri}}
-    style={styles.image}
-    resizeMode='cover'
-    />
+    <View style={styles.container}>
+      { iconId ? 
+        <Image
+      source={{uri}}
+      style={styles.image}
+      resizeMode='cover'
+      /> : <DiscordSvg width={40} height={40}/>
+      }
+    </View>
   )
 }

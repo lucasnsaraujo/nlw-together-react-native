@@ -1,14 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { View, FlatList, Text } from 'react-native'
 import { Profile } from '../../components/Profile';
 import { styles } from './styles';
 import { ButtonAdd } from '../../components/ButtonAdd'
 import { CategorySelect } from '../../components/CategorySelect';
 import { ListHeader } from '../../components/ListHeader';
-import { Appointment } from '../../components/Appointment';
+import { Appointment, AppointmentProps } from '../../components/Appointment';
 import { ListDivider } from '../../components/ListDivider';
 import { Background } from '../../components/Background'
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { COLLECTION_APPOINTMENTS } from '../../configs/database';
+import { Load } from './../../components/Load/index';
 
 
 
@@ -18,117 +21,38 @@ export default function Home() {
 
   const navigation = useNavigation()
 
-  const appointments = [
-    { 
-      id: '1',
-      guild: {
-        id: '1',
-        name: 'Agiotas Vitoria',
-        icon: null,
-        owner: true
-      },
-      category: '1',
-      date: '22/06 às 20:40',
-      description: 'É hoje que vamos ganhar!'
-    },
-    { 
-      id: '2',
-      guild: {
-        id: '1',
-        name: 'Agiotas Serra Sede',
-        icon: null,
-        owner: false
-      },
-      category: '2',
-      date: '22/06 às 20:40',
-      description: 'É hoje que vamos ganhar!'
-    },
-    { 
-      id: '3',
-      guild: {
-        id: '1',
-        name: 'Agiotas Vitoria',
-        icon: null,
-        owner: true
-      },
-      category: '1',
-      date: '22/06 às 20:40',
-      description: 'É hoje que vamos ganhar!'
-    },
-    { 
-      id: '4',
-      guild: {
-        id: '1',
-        name: 'Agiotas Serra Sede',
-        icon: null,
-        owner: false
-      },
-      category: '2',
-      date: '22/06 às 20:40',
-      description: 'É hoje que vamos ganhar!'
-    },
-    { 
-      id: '5',
-      guild: {
-        id: '1',
-        name: 'Agiotas Vitoria',
-        icon: null,
-        owner: true
-      },
-      category: '1',
-      date: '22/06 às 20:40',
-      description: 'É hoje que vamos ganhar!'
-    },
-    { 
-      id: '6',
-      guild: {
-        id: '1',
-        name: 'Agiotas Serra Sede',
-        icon: null,
-        owner: false
-      },
-      category: '2',
-      date: '22/06 às 20:40',
-      description: 'É hoje que vamos ganhar!'
-    },
-    { 
-      id: '7',
-      guild: {
-        id: '1',
-        name: 'Agiotas Vitoria',
-        icon: null,
-        owner: true
-      },
-      category: '1',
-      date: '22/06 às 20:40',
-      description: 'É hoje que vamos ganhar!'
-    },
-    { 
-      id: '8',
-      guild: {
-        id: '1',
-        name: 'Agiotas Serra Sede',
-        icon: null,
-        owner: false
-      },
-      category: '2',
-      date: '22/06 às 20:40',
-      description: 'É hoje que vamos ganhar!'
-    },
-  ]
+  const [appointments, setAppointments] = useState<AppointmentProps[]>([])
+  
+  const [loading, setLoading] = useState(true)
 
   function handleCategorySelect(categoryId: string) {
     categoryId === category ? setCategory('') : setCategory(categoryId)
   }
 
-  function handleAppointmentDetails() {
-    navigation.navigate('AppointmentDetails')
+  function handleAppointmentDetails(guildSelected : AppointmentProps) {
+    navigation.navigate('AppointmentDetails', {guildSelected})
 
   }
   function handleAppointmentCreate() {
     navigation.navigate('AppointmentCreate')
+  }
+
+  async function loadAppointments() {
+    const response = await AsyncStorage.getItem(COLLECTION_APPOINTMENTS);
+    const storage: AppointmentProps[] = response ? JSON.parse(response) : []
+
+    if (category) {
+      setAppointments(storage.filter(item => item.category === category))
+    } else {
+      setAppointments(storage)
+    }
+    setLoading(false)
 
   }
+
+  useFocusEffect(useCallback(()=> {
+    loadAppointments()
+  }, [category]))
 
   return (
     <Background> 
@@ -143,9 +67,11 @@ export default function Home() {
         setCategory={handleCategorySelect}
         />
 
+      { loading ? <Load/> :
+        <>
         <ListHeader
         title='Partidas agendadas'
-        subtitle='Total 6'
+        subtitle={`Total ${appointments.length}`}
         />
 
         <FlatList
@@ -154,7 +80,7 @@ export default function Home() {
         renderItem={({item}) => (
           <Appointment 
           data={item}
-          onPress={handleAppointmentDetails}
+          onPress={() => handleAppointmentDetails(item)}
           />
         )}
         style={styles.matches}
@@ -162,6 +88,7 @@ export default function Home() {
         ItemSeparatorComponent={()=> <ListDivider/>}
         contentContainerStyle={{paddingBottom: 40}}
         />
+      </>}
     </Background> 
 
   );

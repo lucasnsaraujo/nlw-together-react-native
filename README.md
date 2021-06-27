@@ -16,6 +16,6 @@ FINISHED!
 
 ---
 ##Demo
-![Demo](https://s6.gifyu.com/images/WhatsApp-Video-2021-06-26-at-214.md.gif)
+![Demo](https://thumbs.gfycat.com/MetallicReadyGonolek-mobile.mp4)
 
 ###This project was developed in the Rocketseat's Next Level Week

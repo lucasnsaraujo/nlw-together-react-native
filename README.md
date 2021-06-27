@@ -9,13 +9,13 @@
 FINISHED!
 
 ---
-##Tech used
+## Tech used
 - Typescript
 - React Native
 - Expo
 
 ---
-##Demo
+## Demo
 ![Demo](https://thumbs.gfycat.com/MetallicReadyGonolek-mobile.mp4)
 
-###This project was developed in the Rocketseat's Next Level Week
+### This project was developed in the Rocketseat's Next Level Week

@@ -7,3 +7,13 @@
 - Dia 5 [ x ]
 
 FINALIZADA!
+
+---
+##Tecnologias utilizadas
+- Typescript
+- React Native
+- Expo
+
+---
+##Demonstração
+https://s6.gifyu.com/images/WhatsApp-Video-2021-06-26-at-214.md.gif
